@@ -12,6 +12,8 @@ import {
 	logout,
 	resetPassword,
 	signup,
+	updateEmail,
+	updatePassword,
 } from '../firebase';
 
 const AuthContext = createContext<{
@@ -20,12 +22,16 @@ const AuthContext = createContext<{
 	login: typeof login;
 	logout: typeof logout;
 	resetPassword: typeof resetPassword;
+	updateEmail: typeof updateEmail;
+	updatePassword: typeof updatePassword;
 }>({
 	currentUser: null,
 	signup,
 	login,
 	logout,
 	resetPassword,
+	updateEmail,
+	updatePassword,
 });
 
 export function useAuth() {
@@ -51,6 +57,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		login,
 		logout,
 		resetPassword,
+		updateEmail,
+		updatePassword,
 	};
 
 	return (

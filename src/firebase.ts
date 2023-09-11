@@ -1,10 +1,13 @@
 import { initializeApp } from 'firebase/app';
 import {
+	User,
 	createUserWithEmailAndPassword,
 	getAuth,
 	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
 	signOut,
+	updateEmail as updateEmailFirebase,
+	updatePassword as updatePasswordFirebase,
 } from 'firebase/auth';
 
 const app = initializeApp({
@@ -34,6 +37,14 @@ export function logout() {
 
 export function resetPassword(email: string) {
 	return sendPasswordResetEmail(auth, email);
+}
+
+export function updateEmail(user: User, email: string) {
+	return updateEmailFirebase(user, email);
+}
+
+export function updatePassword(user: User, password: string) {
+	return updatePasswordFirebase(user, password);
 }
 
 export default app;
