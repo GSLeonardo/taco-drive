@@ -1,19 +1,21 @@
 import { Container } from 'react-bootstrap';
+
+import { RouterProvider } from 'react-router-dom';
 import { AuthProvider } from '../context/AuthContext';
-import Signup from './Signup';
+import router from '../router';
 
 function App() {
 	return (
-		<AuthProvider>
-			<Container
-				className='d-flex align-items-center justify-content-center'
-				style={{ minHeight: '100vh' }}
-			>
-				<div className='w-100' style={{ maxWidth: '400px' }}>
-					<Signup />
-				</div>
-			</Container>
-		</AuthProvider>
+		<Container
+			className='d-flex align-items-center justify-content-center'
+			style={{ minHeight: '100vh' }}
+		>
+			<div className='w-100' style={{ maxWidth: '400px' }}>
+				<AuthProvider>
+					<RouterProvider router={router} />
+				</AuthProvider>
+			</div>
+		</Container>
 	);
 }
 

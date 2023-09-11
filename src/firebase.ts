@@ -1,8 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import {
-	AuthError,
 	createUserWithEmailAndPassword,
 	getAuth,
+	signInWithEmailAndPassword,
+	signOut,
 } from 'firebase/auth';
 
 const app = initializeApp({
@@ -18,11 +19,16 @@ export const auth = getAuth(app);
 
 export type TCurrentUser = typeof auth.currentUser;
 
-export type SignupError = AuthError;
-
-export function createUser(email: string, password: string) {
+export function signup(email: string, password: string) {
 	return createUserWithEmailAndPassword(auth, email, password);
-	// ^?
+}
+
+export function login(email: string, password: string) {
+	return signInWithEmailAndPassword(auth, email, password);
+}
+
+export function logout() {
+	return signOut(auth);
 }
 
 export default app;
