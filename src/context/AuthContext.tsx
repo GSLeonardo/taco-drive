@@ -5,18 +5,27 @@ import {
 	useEffect,
 	useState,
 } from 'react';
-import { TCurrentUser, auth, login, logout, signup } from '../firebase';
+import {
+	TCurrentUser,
+	auth,
+	login,
+	logout,
+	resetPassword,
+	signup,
+} from '../firebase';
 
 const AuthContext = createContext<{
 	currentUser: TCurrentUser;
 	signup: typeof signup;
 	login: typeof login;
 	logout: typeof logout;
+	resetPassword: typeof resetPassword;
 }>({
 	currentUser: null,
 	signup,
 	login,
 	logout,
+	resetPassword,
 });
 
 export function useAuth() {
@@ -41,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		signup,
 		login,
 		logout,
+		resetPassword,
 	};
 
 	return (

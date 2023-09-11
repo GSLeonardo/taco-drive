@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import {
 	createUserWithEmailAndPassword,
 	getAuth,
+	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
 	signOut,
 } from 'firebase/auth';
@@ -29,6 +30,10 @@ export function login(email: string, password: string) {
 
 export function logout() {
 	return signOut(auth);
+}
+
+export function resetPassword(email: string) {
+	return sendPasswordResetEmail(auth, email);
 }
 
 export default app;
