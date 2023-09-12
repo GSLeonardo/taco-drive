@@ -2,7 +2,9 @@ import { AuthError } from 'firebase/auth';
 import { useRef, useState } from 'react';
 import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
+import CenteredContainer from '../../layouts/CenteredContainer';
+import { ROUTES } from '../../router';
 
 export default function UpdateProfile() {
 	const { currentUser, updateEmail, updatePassword } = useAuth();
@@ -52,7 +54,7 @@ export default function UpdateProfile() {
 
 		Promise.all(promises)
 			.then(() => {
-				navigate('/');
+				navigate(ROUTES.DASHBOARD);
 			})
 			.catch((error: AuthError) => {
 				const { message } = error;
@@ -64,50 +66,52 @@ export default function UpdateProfile() {
 	}
 
 	return (
-		<>
-			<Card>
-				<Card.Body>
-					<h2 className='text-center mb-4'>Update Profile</h2>
-					{authError && <Alert variant='danger'>{authError}</Alert>}
-					<Form onSubmit={handleSubmit}>
-						<Form.Group id='email' className='mt-3'>
-							<Form.Label>Email</Form.Label>
-							<Form.Control
-								type='email'
-								ref={emailRef}
-								required
-								defaultValue={currentUser!.email!}
-							/>
-						</Form.Group>
-						<Form.Group id='password' className='mt-3'>
-							<Form.Label>Password</Form.Label>
-							<Form.Control
-								type='password'
-								ref={passwordRef}
-								placeholder='Leave blank to keep password'
-							/>
-						</Form.Group>
-						<Form.Group id='password-confirm' className='mt-3'>
-							<Form.Label>Password Confirmation</Form.Label>
-							<Form.Control
-								type='password'
-								ref={passwordConfirmRef}
-								placeholder='Leave blank to keep password'
-							/>
-						</Form.Group>
-						<Button
-							type='submit'
-							disabled={waitingForProfileUpdate}
-							className='w-100 mt-3'
-						>
-							Update
-						</Button>
-					</Form>
-				</Card.Body>
-			</Card>
-			<div className='w-100 text-center mt-2'>
-				<Link to={'/'}>Cancel</Link>
-			</div>
-		</>
+		<CenteredContainer>
+			<>
+				<Card>
+					<Card.Body>
+						<h2 className='text-center mb-4'>Update Profile</h2>
+						{authError && <Alert variant='danger'>{authError}</Alert>}
+						<Form onSubmit={handleSubmit}>
+							<Form.Group id='email' className='mt-3'>
+								<Form.Label>Email</Form.Label>
+								<Form.Control
+									type='email'
+									ref={emailRef}
+									required
+									defaultValue={currentUser!.email!}
+								/>
+							</Form.Group>
+							<Form.Group id='password' className='mt-3'>
+								<Form.Label>Password</Form.Label>
+								<Form.Control
+									type='password'
+									ref={passwordRef}
+									placeholder='Leave blank to keep password'
+								/>
+							</Form.Group>
+							<Form.Group id='password-confirm' className='mt-3'>
+								<Form.Label>Password Confirmation</Form.Label>
+								<Form.Control
+									type='password'
+									ref={passwordConfirmRef}
+									placeholder='Leave blank to keep password'
+								/>
+							</Form.Group>
+							<Button
+								type='submit'
+								disabled={waitingForProfileUpdate}
+								className='w-100 mt-3'
+							>
+								Update
+							</Button>
+						</Form>
+					</Card.Body>
+				</Card>
+				<div className='w-100 text-center mt-2'>
+					<Link to={ROUTES.DASHBOARD}>Cancel</Link>
+				</div>
+			</>
+		</CenteredContainer>
 	);
 }
