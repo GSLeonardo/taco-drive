@@ -29,7 +29,7 @@ const router = createBrowserRouter([
 				children: [
 					// Drive
 					{
-						index: true,
+						path: ROUTES.ROOT,
 						element: <Dashboard />,
 					},
 					{
