@@ -3,30 +3,32 @@ import {
 	DocumentData,
 	DocumentSnapshot,
 	FieldValue,
+	QueryDocumentSnapshot,
+	Unsubscribe,
 	addDoc,
 	collection,
 	doc,
 	getDoc as getDocFirebase,
 	getDocs,
 	getFirestore,
+	onSnapshot as onSnapshotFirebase,
 	orderBy,
 	query,
 	serverTimestamp,
+	updateDoc,
 	where,
 } from 'firebase/firestore';
 import app from './config';
-
-const firestore = getFirestore(app);
 
 export type TCollectionCategory = 'folders' | 'files';
 
 export type TDocData = DocumentData & {
 	name: string;
-	// parentId: string;
 	userId: string;
-	// path: string;
 	createdAt: FieldValue;
 };
+
+const firestore = getFirestore(app);
 
 function addToCollection(category: TCollectionCategory, data: TDocData) {
 	return addDoc(collection(firestore, category), data);
@@ -44,10 +46,28 @@ function formatDoc<T>(doc: DocumentSnapshot): T {
 	} as T;
 }
 
-async function getChildFolders<T>(
-	parentId: string | null,
+async function getDuplicateFiles(
+	name: string,
+	folderId: string,
 	userId: string
-): Promise<Array<T>> {
+): Promise<Array<QueryDocumentSnapshot>> {
+	const searchQuery = query(
+		database.files,
+		where('name', '==', name),
+		where('folderId', '==', folderId),
+		where('userId', '==', userId)
+	);
+
+	const searchQuerySnapshot = await getDocs(searchQuery);
+
+	return searchQuerySnapshot.docs;
+}
+
+function getChildFolders<T>(
+	parentId: string | null,
+	userId: string,
+	onSnapshot: (childFolders: Array<T>) => void
+): Unsubscribe {
 	const searchQuery = query(
 		database.folders,
 		where('parentId', '==', parentId),
@@ -55,8 +75,26 @@ async function getChildFolders<T>(
 		orderBy('createdAt')
 	);
 
-	const searchQuerySnapshot = await getDocs(searchQuery);
-	return searchQuerySnapshot.docs.map((doc) => formatDoc(doc) as T);
+	return onSnapshotFirebase(searchQuery, (searchQuerySnapshot) => {
+		onSnapshot(searchQuerySnapshot.docs.map((doc) => formatDoc(doc) as T));
+	});
+}
+
+function getChildFiles<T>(
+	folderId: string | null,
+	userId: string,
+	onSnapshot: (files: Array<T>) => void
+): Unsubscribe {
+	const searchQuery = query(
+		database.files,
+		where('folderId', '==', folderId),
+		where('userId', '==', userId),
+		orderBy('createdAt')
+	);
+
+	return onSnapshotFirebase(searchQuery, (searchQuerySnapshot) => {
+		onSnapshot(searchQuerySnapshot.docs.map((doc) => formatDoc(doc) as T));
+	});
 }
 
 export const database = {
@@ -67,4 +105,7 @@ export const database = {
 	addToCollection,
 	formatDoc,
 	getChildFolders,
+	getChildFiles,
+	getDuplicateFiles,
+	update: updateDoc,
 };

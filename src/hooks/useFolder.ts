@@ -1,11 +1,12 @@
 import { useEffect, useReducer } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { database } from '../firebase/database';
+import { TDocData, database } from '../firebase/database';
 
 enum ACTIONS {
 	SELECT_FOLDER = 'select-folder',
 	UPDATE_FOLDER = 'update-folder',
 	SET_CHILD_FOLDERS = 'set-child-folders',
+	SET_CHILD_FILES = 'set-child-files',
 }
 
 export type TPathElement = {
@@ -19,42 +20,53 @@ export type TFolder = {
 	path: Array<TPathElement>;
 };
 
-export type TFolderState = {
+export type TFile = TDocData & {
+	id: string;
+	url: string;
+	folderId: string;
+};
+
+export type TUseFolderState = {
 	folderId: string | null;
 	folder: TFolder | null;
 	childFolders: TFolder[];
-	childFiles: any[];
+	childFiles: TFile[];
 };
 
 export const ROOT_FOLDER: TFolder = { name: 'Root', id: null, path: [] };
 
 function reducer(
-	state: TFolderState,
+	state: TUseFolderState,
 	{
 		type,
 		payload,
 	}: {
 		type: ACTIONS;
-		payload: Partial<TFolderState>;
+		payload: Partial<TUseFolderState>;
 	}
-): TFolderState {
+): TUseFolderState {
 	switch (type) {
 		case ACTIONS.SELECT_FOLDER:
 			return {
-				folderId: (payload as Required<TFolderState>).folderId,
-				folder: (payload as Required<TFolderState>).folder,
+				folderId: (payload as Required<TUseFolderState>).folderId,
+				folder: (payload as Required<TUseFolderState>).folder,
 				childFolders: [],
 				childFiles: [],
 			};
 		case ACTIONS.UPDATE_FOLDER:
 			return {
 				...state,
-				folder: (payload as Required<TFolderState>).folder,
+				folder: (payload as Required<TUseFolderState>).folder,
 			};
 		case ACTIONS.SET_CHILD_FOLDERS:
 			return {
 				...state,
-				childFolders: (payload as Required<TFolderState>).childFolders,
+				childFolders: (payload as Required<TUseFolderState>).childFolders,
+			};
+		case ACTIONS.SET_CHILD_FILES:
+			return {
+				...state,
+				childFiles: (payload as Required<TUseFolderState>).childFiles,
 			};
 		default:
 			return state;
@@ -116,18 +128,34 @@ export function useFolder(
 	useEffect(() => {
 		if (currentUser === null) return;
 
-		database
-			.getChildFolders<TFolder>(folderId, currentUser.uid)
-			.then((childFolders) => {
-				dispatch({
-					type: ACTIONS.SET_CHILD_FOLDERS,
-					payload: {
-						...state,
-						childFolders,
-					},
-				});
+		const onSnapshot = (childFolders: TFolder[]) => {
+			dispatch({
+				type: ACTIONS.SET_CHILD_FOLDERS,
+				payload: {
+					...state,
+					childFolders,
+				},
 			});
-	}, [folderId]);
+		};
+
+		database.getChildFolders<TFolder>(folderId, currentUser.uid, onSnapshot);
+	}, [folderId, currentUser]);
+
+	useEffect(() => {
+		if (currentUser === null) return;
+
+		const onSnapshot = (files: TFile[]) => {
+			dispatch({
+				type: ACTIONS.SET_CHILD_FILES,
+				payload: {
+					...state,
+					childFiles: files,
+				},
+			});
+		};
+
+		database.getChildFiles<TFile>(folderId, currentUser.uid, onSnapshot);
+	}, [folderId, currentUser]);
 
 	return state;
 }
