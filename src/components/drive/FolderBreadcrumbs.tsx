@@ -11,7 +11,6 @@ export default function FolderBreadcrumbs({
 	currentFolder,
 }: TFolderBreadcrumbs) {
 	const ROOT_PATH_ELEMENT = ROOT_FOLDER as TPathElement;
-	console.log(currentFolder, ROOT_PATH_ELEMENT);
 	let path = currentFolder == ROOT_PATH_ELEMENT ? [] : [ROOT_PATH_ELEMENT];
 
 	if (currentFolder !== null) {
