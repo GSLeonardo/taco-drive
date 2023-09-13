@@ -1,9 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Dashboard from '../components/Dashboard';
 import ForgotPassword from '../components/authentication/ForgotPassword';
-import Login from '../components/authentication/Login';
+import Login from '../components/authentication/Login.tsx';
+import Profile from '../components/authentication/Profile';
 import Signup from '../components/authentication/Signup';
 import UpdateProfile from '../components/authentication/UpdateProfile';
+import Dashboard from '../components/drive/Dashboard';
 import PrivateLayout from '../layouts/PrivateLayout';
 import RootLayout from '../layouts/RootLayout';
 
@@ -12,8 +13,9 @@ export enum ROUTES {
 	LOGIN = '/login',
 	SIGNUP = '/signup',
 	FORGOT_PASSWORD = '/forgot-password',
-	DASHBOARD = '/user',
+	PROFILE = '/user',
 	UPDATE_PROFILE = '/update-profile',
+	FOLDER = '/folder',
 }
 
 const router = createBrowserRouter([
@@ -26,11 +28,18 @@ const router = createBrowserRouter([
 				element: <PrivateLayout />,
 				children: [
 					// Drive
-
+					{
+						index: true,
+						element: <Dashboard />,
+					},
+					{
+						path: `${ROUTES.FOLDER}/:folderId`,
+						element: <Dashboard />,
+					},
 					// Profile
 					{
-						path: ROUTES.DASHBOARD,
-						element: <Dashboard />,
+						path: ROUTES.PROFILE,
+						element: <Profile />,
 					},
 					{
 						path: ROUTES.UPDATE_PROFILE,

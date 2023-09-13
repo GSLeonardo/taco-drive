@@ -54,7 +54,7 @@ export default function UpdateProfile() {
 
 		Promise.all(promises)
 			.then(() => {
-				navigate(ROUTES.DASHBOARD);
+				navigate(ROUTES.PROFILE);
 			})
 			.catch((error: AuthError) => {
 				const { message } = error;
@@ -109,7 +109,7 @@ export default function UpdateProfile() {
 					</Card.Body>
 				</Card>
 				<div className='w-100 text-center mt-2'>
-					<Link to={ROUTES.DASHBOARD}>Cancel</Link>
+					<Link to={ROUTES.PROFILE}>Cancel</Link>
 				</div>
 			</>
 		</CenteredContainer>

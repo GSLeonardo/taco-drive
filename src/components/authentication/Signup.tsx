@@ -41,7 +41,7 @@ export default function Signup() {
 
 		try {
 			await signup(email, password);
-			navigate(ROUTES.DASHBOARD);
+			navigate(ROUTES.ROOT);
 		} catch (error: any) {
 			const { message } = error as AuthError;
 			setAuthError(message);

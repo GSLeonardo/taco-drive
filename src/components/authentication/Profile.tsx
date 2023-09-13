@@ -2,9 +2,9 @@ import { AuthError } from 'firebase/auth';
 import { useState } from 'react';
 import { Alert, Button, Card } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
-export default function Dashboard() {
+export default function Profile() {
 	const { currentUser, logout } = useAuth();
 	const navigate = useNavigate();
 

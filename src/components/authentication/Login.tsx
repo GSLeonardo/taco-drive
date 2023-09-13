@@ -31,7 +31,7 @@ export default function Login() {
 
 		try {
 			await login(email, password);
-			navigate(ROUTES.DASHBOARD);
+			navigate(ROUTES.ROOT);
 		} catch (error: any) {
 			const { message } = error as AuthError;
 			setAuthError(message);
