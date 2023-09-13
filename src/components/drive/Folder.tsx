@@ -9,6 +9,9 @@ export default function Folder({ folder }: { folder: TFolder }) {
 	return (
 		<Button
 			to={`${ROUTES.FOLDER}/${folder.id ? folder.id : ''}`}
+			state={{
+				folder: folder,
+			}}
 			variant='outline-dark'
 			//@ts-ignore
 			as={Link}

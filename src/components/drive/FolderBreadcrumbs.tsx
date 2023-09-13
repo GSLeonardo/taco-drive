@@ -21,7 +21,7 @@ export default function FolderBreadcrumbs({
 			className='flex-grow-1 '
 			listProps={{ className: 'bg-white pl-0 m-0' }}
 		>
-			{path.map((pathElement) => (
+			{path.map((pathElement, index) => (
 				<BreadcrumbItem
 					key={pathElement.id}
 					linkAs={Link}
@@ -29,6 +29,12 @@ export default function FolderBreadcrumbs({
 						to: pathElement.id
 							? `${ROUTES.FOLDER}/${pathElement.id}`
 							: `${ROUTES.ROOT}`,
+						state: {
+							folder: {
+								...pathElement,
+								path: path.slice(1, index),
+							} as TFolder,
+						},
 					}}
 					style={{ maxWidth: '150px' }}
 					className='text-truncate d-inline-block'

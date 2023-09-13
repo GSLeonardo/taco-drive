@@ -1,6 +1,6 @@
 import { Container } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
-import { useFolder } from '../../hooks/useFolder';
+import { useLocation, useParams } from 'react-router-dom';
+import { TFolder, useFolder } from '../../hooks/useFolder';
 import AddFolderButton from './AddFolderButton';
 import Navbar from './DriveNavbar';
 import Folder from './Folder';
@@ -8,7 +8,8 @@ import FolderBreadcrumbs from './FolderBreadcrumbs';
 
 export default function Dashboard() {
 	const { folderId } = useParams();
-	const { folder, childFolders } = useFolder(folderId);
+	const { state }: { state: { folder: TFolder | null } } = useLocation();
+	const { folder, childFolders } = useFolder(folderId, state?.folder);
 
 	return (
 		<>
