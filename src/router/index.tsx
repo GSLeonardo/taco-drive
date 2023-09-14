@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import ForgotPassword from '../components/authentication/ForgotPassword';
-import Login from '../components/authentication/Login.tsx';
+import Login from '../components/authentication/Login';
 import Profile from '../components/authentication/Profile';
 import Signup from '../components/authentication/Signup';
 import UpdateProfile from '../components/authentication/UpdateProfile';
