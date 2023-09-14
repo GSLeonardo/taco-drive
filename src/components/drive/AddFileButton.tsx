@@ -56,7 +56,6 @@ export default function AddFileButton({ currentFolder }: TAddFileButton) {
 		};
 
 		const onError = () => {
-			console.log('error');
 			setUploadingFiles((prevUploadingFiles) => {
 				return prevUploadingFiles.map((uploadFile) => {
 					if (uploadFile.id === id) {
